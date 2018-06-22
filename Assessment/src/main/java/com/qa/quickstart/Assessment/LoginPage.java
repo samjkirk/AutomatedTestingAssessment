@@ -8,11 +8,11 @@ public class LoginPage {
 	WebDriver myDriver;
 	
 	// Get element variables
-	@FindBy(css = "#txtUsername")
+	@FindBy(id = "txtUsername")
 	private WebElement username;
-	@FindBy(css = "#txtPassword")
+	@FindBy(id = "txtPassword")
 	private WebElement password;
-	@FindBy(css = "#btnLogin")
+	@FindBy(id = "btnLogin")
 	private WebElement loginButton;
 	
 	// Set WebDriver
