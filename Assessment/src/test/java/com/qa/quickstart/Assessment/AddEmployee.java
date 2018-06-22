@@ -1,14 +1,13 @@
 package com.qa.quickstart.Assessment;
 
 import static org.junit.Assert.assertNotNull;
+import org.junit.Assert;
 import static org.junit.Assert.*;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.support.PageFactory;
-
 import com.relevantcodes.extentreports.ExtentReports;
 import com.relevantcodes.extentreports.ExtentTest;
 import com.relevantcodes.extentreports.LogStatus;
-
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
@@ -37,7 +36,9 @@ public class AddEmployee {
 	@Given("^the Add Employee Tab$")
 	public void the_Add_Employee_Tab() {
 		
-		// Set ChromeDriver PATH | Set ExtentReport PATH | Start test
+		// Set ChromeDriver PATH 
+		// Set ExtentReport PATH 
+		// Start test
 		System.setProperty("webdriver.chrome.driver", "C:\\Users\\Admin\\Documents\\chromedriver_win32\\chromedriver.exe");
 		OrangeHRM_REPORT = new ExtentReports ("C:\\Users\\Admin\\Documents\\AutomatedTestingExercises\\New folder\\Assessment\\src\\Reports\\OrangeHRM_REPORT.html", true);
 		addNewUser = OrangeHRM_REPORT.startTest("Testing the add new user function...");
@@ -88,17 +89,31 @@ public class AddEmployee {
 	@When("^I click the Save button$")
 	public void i_click_the_Save_button() {
 		// Click save details
-	    add_employee_tab.saveDetails();
-	    addNewUser.log(LogStatus.INFO, "Successfully saved details" + " | Current URL: " + myDriver.getCurrentUrl());
+		try {
+			add_employee_tab.saveDetails();
+			Assert.assertFalse(myDriver.findElementByClassName("message").isDisplayed());
+		    addNewUser.log(LogStatus.INFO, "Successfully saved details" + " | Current URL: " + myDriver.getCurrentUrl());
+		} catch (AssertionError e) {
+			addNewUser.log(LogStatus.FAIL, "User already exists. Failed to create new user." + " | Current URL: " + myDriver.getCurrentUrl());
+			OrangeHRM_REPORT.flush();
+		    myDriver.quit();
+			fail();
+		} 
 	}
 
 	@Then("^I can see information about the user$")
 	public void i_can_see_information_about_the_user() {
 		info_tab = PageFactory.initElements(myDriver, InformationTab.class);
 		// Check to see if new user/employee was created
-	    assertEquals("Drizzy", info_tab.returnUserFirstName());
-	    addNewUser.log(LogStatus.PASS, "Successfully added a new employee" + " | Current URL: " + myDriver.getCurrentUrl());
-	    OrangeHRM_REPORT.flush();
-	    myDriver.quit();
+		try {
+			assertEquals("Drizzy", info_tab.returnUserFirstName());
+			addNewUser.log(LogStatus.PASS, "Successfully added a new employee" + " | Current URL: " + myDriver.getCurrentUrl());
+		} catch (AssertionError e) {
+			addNewUser.log(LogStatus.FAIL, "Failed to add a new employee" + " | Current URL: " + myDriver.getCurrentUrl());
+			fail();
+		} finally {
+			OrangeHRM_REPORT.flush();
+		    myDriver.quit();
+		}
 	}
 }
