@@ -25,6 +25,13 @@ public class AddEmployee {
 	AddEmployeeTab add_employee_tab;
 	InformationTab info_tab;
 	
+	// Login and user details
+	String employeeFirstName = "Drizzy";
+	String employeeMiddleName = "D-Man";
+	String employeeLastName = "Drake";
+	String employeeID = "1234";
+	String employeeUsername = "drizzy123";
+	String employeePassword = "password";
 	
 	// Navigate to the add employee tab
 	@Given("^the Add Employee Tab$")
@@ -42,12 +49,12 @@ public class AddEmployee {
 		addNewUser.log(LogStatus.INFO, "Broswer started");
 		
 		// Navigate to OrangeHRM dashboard
-		myDriver.navigate().to("http://opensource.demo.orangehrmlive.com/index.php/dashboard");
+		myDriver.navigate().to(Constant.URL1);
 		addNewUser.log(LogStatus.INFO, "Current URL: " + myDriver.getCurrentUrl());
 		
 		// Login
 		login_page = PageFactory.initElements(myDriver, LoginPage.class);
-		login_page.login();
+		login_page.login(Constant.ADMIN_USERNAME, Constant.ADMIN_PASSWORD);
 		addNewUser.log(LogStatus.INFO, "Successfully logged in..." + " | Current URL: " + myDriver.getCurrentUrl());
 		
 		// Navigate to add employee tab
@@ -60,7 +67,7 @@ public class AddEmployee {
 	public void i_fill_out_the_Employee_Details_correctly() {
 	    add_employee_tab = PageFactory.initElements(myDriver, AddEmployeeTab.class);
 	    // Fill out employee details
-	    add_employee_tab.fillOutDetails("Drizzy", "D-Man", "Drake", "1234", "C:\\Users\\Admin\\Documents\\AutomatedTestingExercises\\New folder\\Assessment\\src\\testImage\\drake.jpg");
+	    add_employee_tab.fillOutDetails(employeeFirstName, employeeMiddleName, employeeLastName, employeeID, Constant.PATH);
 	    addNewUser.log(LogStatus.INFO, "Successfully filled out employee details" + " | Current URL: " + myDriver.getCurrentUrl());
 	}
 
@@ -74,7 +81,7 @@ public class AddEmployee {
 	@When("^I fill out the Login Details correctly$")
 	public void i_fill_out_the_Login_Details_correctly() {
 		// Send login details
-	    add_employee_tab.fillOutLoginDetails("drizzy123", "password", false);
+	    add_employee_tab.fillOutLoginDetails(employeeUsername, employeePassword, false);
 	    addNewUser.log(LogStatus.INFO, "Successfully filled out login details" + " | Current URL: " + myDriver.getCurrentUrl());
 	}
 

@@ -21,9 +21,9 @@ public class LoginPage {
 	}
 	
 	// Login
-	public void login() {
-		username.sendKeys("Admin");
-		password.sendKeys("admin");
+	public void login(String usernametxt, String passwordtxt) {
+		username.sendKeys(usernametxt);
+		password.sendKeys(passwordtxt);
 		loginButton.click();
 	}
 }
